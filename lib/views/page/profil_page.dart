@@ -20,8 +20,8 @@ class _PageProfilState extends State<PageProfil> {
 
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
-        statusBarColor: AppColors.primaryColor, // 🔵 la couleur de ton AppBar
-        statusBarIconBrightness: Brightness.light, // blanc si ta status bar est foncée
+        statusBarColor: AppColors.primaryColor, 
+        statusBarIconBrightness: Brightness.light, 
       ),
     );
   }
