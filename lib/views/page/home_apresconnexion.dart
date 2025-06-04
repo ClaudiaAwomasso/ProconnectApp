@@ -4,7 +4,6 @@ import 'package:proconnect_app/views/page/page_acceuil.dart';
 
 import 'package:proconnect_app/views/page/page_message.dart';
 import 'package:proconnect_app/views/page/page_offres.dart';
-import 'package:proconnect_app/views/page/portfolio_page.dart';
 import 'package:proconnect_app/views/page/profil_page.dart';
 class ProconnectHome extends StatefulWidget {
   @override
@@ -17,10 +16,9 @@ class _ProconnectHomeState extends State<ProconnectHome> {
   final List<Widget> _pages = [
     PageAcceuil(),
       // Pagexemple(),
-    PortfolioPage(),
     PageMessage(),
     PageOffres(),
-    //ProfilPage()
+    PageProfil(),
 
   ];
 
@@ -42,11 +40,10 @@ class _ProconnectHomeState extends State<ProconnectHome> {
       showUnselectedLabels: true,
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Accueil' , ),
-          BottomNavigationBarItem(icon: Icon(Icons.create_new_folder_rounded), label: 'Créer un portfolio'),
+        //  BottomNavigationBarItem(icon: Icon(Icons.create_new_folder_rounded), label: 'Créer un portfolio'),
           BottomNavigationBarItem(icon: Icon(Icons.work), label: "Offres d'emploi"),
           BottomNavigationBarItem(icon: Icon(Icons.message), label: 'Messages'),
-        //  BottomNavigationBarItem(icon: Icon(Icons.message), label: 'Profil'),
-        ],
+         BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),],
       ),
     );
   }

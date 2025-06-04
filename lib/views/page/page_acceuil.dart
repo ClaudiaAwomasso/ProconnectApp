@@ -16,7 +16,7 @@ class PageAcceuil extends StatelessWidget {
         leading: Icon(Icons.work_outlined,size: 30, ),
         title: Text('Proconnect', style: TextStyle( fontSize: 25, fontWeight: FontWeight.bold)),
         actions: [
-          IconButton(onPressed: (){}, icon: Icon(Icons.person,size: 30,))
+          IconButton(onPressed: (){}, icon: Icon(Icons.settings,size: 30,))
         ],
       ),
 

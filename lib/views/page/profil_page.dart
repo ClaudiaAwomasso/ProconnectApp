@@ -1,142 +1,91 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:proconnect_app/views/colors/app_colors.dart';
-import 'package:proconnect_app/views/images_path/images_path.dart';
-import 'package:permission_handler/permission_handler.dart';  // <-- correction ici
+import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:proconnect_app/providers/user_provider.dart';
 
-class ProfilePage extends StatefulWidget {
-  final String nom;
-  final String email;
-  final String profession;
-  final String contact;
-  final String ville;
-  final List<String> competences;
+import '../colors/app_colors.dart';
 
-  ProfilePage({
-    required this.nom,
-    required this.email,
-    required this.profession,
-    required this.contact,
-    required this.ville,
-    required this.competences,
-  });
+class PageProfil extends StatefulWidget {
+  const PageProfil ({super.key});
 
   @override
-  _ProfilePageState createState() => _ProfilePageState();
+  State<PageProfil> createState() => _PageProfilState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
-  File? _imageFile;
+class _PageProfilState extends State<PageProfil> {
+  @override
+  void initState() {
+    super.initState();
 
-  Future<void> _pickImage() async {
-    var status = await Permission.storage.status;
-    if (!status.isGranted) {
-      status = await Permission.storage.request();
-      if (!status.isGranted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Permission stockage refusée')),
-        );
-        return;
-      }
-    }
-
-    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      setState(() {
-        _imageFile = File(pickedFile.path);
-      });
-    }
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarColor: AppColors.primaryColor, // 🔵 la couleur de ton AppBar
+        statusBarIconBrightness: Brightness.light, // blanc si ta status bar est foncée
+      ),
+    );
   }
 
   @override
+
   Widget build(BuildContext context) {
+    final user = Provider.of<UserProvider>(context).user;
+
+    if (user == null) {
+      return Scaffold(
+        appBar: AppBar(title: const Text("Profil")),
+        body: const Center(child: Text("Aucun utilisateur connecté.")),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
+        foregroundColor: Colors.white,
         backgroundColor: AppColors.primaryColor,
-        title: Text('Profil Utilisateur' ,),
-      ),
+        title: const Text("Profil",),),
       body: Padding(
-        padding: EdgeInsets.all(16),
-        child: Column(
+        padding: const EdgeInsets.all(16),
+        child: ListView(
           children: [
-            Stack(
-              alignment: Alignment.bottomRight,
-              children: [
-                CircleAvatar(
-                  radius: 60,
-                  backgroundImage: _imageFile != null
-                      ? FileImage(_imageFile!)
-                      : AssetImage(ImagesPath.imagesperson) as ImageProvider,
-                ),
-                Positioned(
-                  bottom: 0,
-                  right: 4,
-                  child: Container(
-                    padding: EdgeInsets.all(6),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: AppColors.primaryColor,
-                    ),
-                    child: IconButton(
-                      icon: Icon(Icons.camera_alt, color: Colors.white),
-                      onPressed: _pickImage,
-                      tooltip: 'Changer la photo de profil',
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 20),
-            Align(
-              alignment: Alignment.center,
-              child: Column(
-                children: [
-                  Text(' ${widget.nom}', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                  Text(' ${widget.profession}', style: TextStyle(fontSize: 18)),
-                  Text(' ${widget.ville}', style: TextStyle(fontSize: 18)),
-                ],
-              ),
-            ),
-            SizedBox(height: 20),
-           Column(
-           children: [
-             Padding(
-               padding: const EdgeInsets.all(8.0),
-               child: Align(
-                   alignment: Alignment.centerLeft,
-                   child: Text('Information personnelles', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),)),
-             ),
-             ListTile(
-               leading: Icon(Icons.mail_outline),
-               title: Text('${widget.email}',style: TextStyle(fontSize: 18), ),
-             ),
-             ListTile(
-               leading:Icon(Icons.phone) ,
-               title: Text('${widget.contact}', style: TextStyle(fontSize: 18),
-             )
-             )
-           ],
+           ListTile(
+             title:Text('Informations personnelles' , style: TextStyle(fontWeight: FontWeight.bold,color: AppColors.primaryColor,),) ,
+               trailing: IconButton(onPressed: (){}, icon: Icon(Icons.edit,))
            ),
-            Align(
-              alignment: Alignment.center,
-              child: Text(
-                'Compétences :',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
+           ListTile(
+               title: const Text("Nom", style: TextStyle(fontWeight: FontWeight.w500,),),
+               subtitle: Text(user.nom),
+           ),
+           ListTile(
+             title: const Text("Email", style: TextStyle(fontWeight: FontWeight.w500),),
+             subtitle: Text(user.email),
+           ),
+           ListTile(
+             title: const Text("Pays", style: TextStyle(fontWeight: FontWeight.w500),),
+             subtitle: Text(user.pays),
+           ),
+           ListTile(
+             title: const Text("Ville",style: TextStyle(fontWeight: FontWeight.w500),),
+             subtitle: Text(user.ville),
+           ),
+            Divider(),
+            ListTile(
+                title:Text('Informations professionnelles' , style: TextStyle(fontWeight: FontWeight.bold,color: AppColors.primaryColor,fontSize: 15),) ,
+                trailing: IconButton(onPressed: (){}, icon: Icon(Icons.edit,))
             ),
-            SizedBox(height: 10),
-            Wrap(
-              spacing: 8,
-              children: widget.competences
-                  .map(
-                    (skill) => Chip(
-                  backgroundColor: AppColors.primaryColor,
-                  label: Text(skill, style: TextStyle(color: Colors.white)),
-                ),
-              )
-                  .toList(),
+            ListTile(
+              title: const Text("Compétences", style: TextStyle(fontWeight: FontWeight.w500),),
+              subtitle: Text(user.competences.join(", ")),
+
+            ),
+            ListTile(
+              title: const Text("Expériences",style: TextStyle(fontWeight: FontWeight.w500),),
+              subtitle: Text(user.experiences.join(", "))
+            ),
+            Divider(),
+            ListTile(
+              title: Text("Parcours professionnel", style: TextStyle(fontWeight: FontWeight.w500, color: AppColors.primaryColor ),),
+              subtitle: Text(user.parcoursPro),
+                trailing: IconButton(onPressed: (){}, icon: Icon(Icons.edit,))
             ),
           ],
         ),
@@ -144,3 +93,4 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 }
+

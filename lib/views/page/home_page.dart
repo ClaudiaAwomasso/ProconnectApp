@@ -21,7 +21,8 @@ class MyHomePage extends StatelessWidget {
     ),
             SizedBox(height: 10,),
                   Image(
-                    width: 400,
+                    width: MediaQuery.of(context).size.width *10,
+                 //   width: 300,
                     image: AssetImage(
                       ImagesPath.imagesperson
                     ),
