@@ -101,7 +101,7 @@ class _PageInscriptionState extends State<PageInscription> {
   // ✅ Redirection selon le rôle sélectionné
   if (_selectedRole == "Recruteur") {
     Navigator.push(context,
-        MaterialPageRoute(builder: (context) => PageRecruteur()));
+        MaterialPageRoute(builder: (context) => PageRecruteur() ));
   } else {
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => ProconnectHome()));
